@@ -2,6 +2,7 @@ package `in`.farmguide.myapplication.dependency.module
 
 import `in`.farmguide.myapplication.repository.network.ApiRepository
 import `in`.farmguide.myapplication.BuildConfig
+import `in`.farmguide.myapplication.repository.network.ApiKeyInterceptor
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import dagger.Module
@@ -31,8 +32,10 @@ class NetModule {
 
     @Provides
     @Singleton
-    internal fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    internal fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor,
+                                     apiKeyInterceptor: ApiKeyInterceptor): OkHttpClient {
         val builder = OkHttpClient.Builder()
+        builder.addInterceptor(apiKeyInterceptor)
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(httpLoggingInterceptor)
         }
