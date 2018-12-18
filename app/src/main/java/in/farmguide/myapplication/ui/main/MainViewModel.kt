@@ -1,39 +1,35 @@
 package `in`.farmguide.myapplication.ui.main
 
 import `in`.farmguide.myapplication.R
+import `in`.farmguide.myapplication.data.ui.CategorizedRestaurants
 import `in`.farmguide.myapplication.data.ui.Resource
-import `in`.farmguide.myapplication.domain.GetPostsUseCase
-import `in`.farmguide.myapplication.repository.db.post.PostMinimal
+import `in`.farmguide.myapplication.domain.GetCategorizedRestaurantsUseCase
 import `in`.farmguide.myapplication.ui.base.BaseViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import io.reactivex.disposables.Disposable
 
-class MainViewModel(private val getPostsUseCase: GetPostsUseCase) : BaseViewModel() {
+class MainViewModel(private val getCategorizedRestaurantsUseCase: GetCategorizedRestaurantsUseCase) : BaseViewModel() {
 
-    private val postsLiveData = MutableLiveData<Resource<List<PostMinimal>>>()
-    private var disposable: Disposable? = null
+    private val categoriesLiveData = MutableLiveData<Resource<List<CategorizedRestaurants>>>()
 
-    fun getPostsObservable(): LiveData<Resource<List<PostMinimal>>> = postsLiveData
+    fun getCategoriesObservable(): LiveData<Resource<List<CategorizedRestaurants>>> = categoriesLiveData
 
-    fun onLoadPostsClicked() {
-
-        postsLiveData.postValue(Resource.Loading())
-
-        disposable?.dispose()
-
-        disposable = getPostsUseCase.getPosts()
-            .onBackpressureLatest()
-            .subscribe({
-                postsLiveData.postValue(Resource.Success(it))
-            }, {
-                postsLiveData.postValue(Resource.Error(R.string.error_msg))
-            })
+    init {
+        getRestaurants()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
-    }
+    fun onRetryClicked() = getRestaurants()
 
+    private fun getRestaurants() {
+        categoriesLiveData.postValue(Resource.Loading())
+
+        addDisposable(
+            getCategorizedRestaurantsUseCase.getRestaurants()
+                .subscribe({
+                    categoriesLiveData.postValue(Resource.Success(it))
+                }, {
+                    categoriesLiveData.postValue(Resource.Error(R.string.error_msg))
+                })
+        )
+    }
 }

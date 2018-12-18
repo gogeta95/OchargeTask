@@ -12,7 +12,7 @@ class MainModule {
             ViewModelProviders.of(mainActivity, mainViewModelFactory).get(MainViewModel::class.java)
 
     @Provides
-    fun providePostsAdapter(mainActivity: MainActivity) =
-            PostsAdapter(mainActivity.layoutInflater)
+    fun provideCategoryAdapter(mainActivity: MainActivity) =
+            CategoryAdapter(mainActivity.layoutInflater)
 
 }

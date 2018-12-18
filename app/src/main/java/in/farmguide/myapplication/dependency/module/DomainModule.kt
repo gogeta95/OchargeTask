@@ -1,7 +1,7 @@
 package `in`.farmguide.myapplication.dependency.module
 
-import `in`.farmguide.myapplication.domain.GetPostsUseCase
-import `in`.farmguide.myapplication.domainimpl.GetPostsUseCaseImpl
+import `in`.farmguide.myapplication.domain.GetCategorizedRestaurantsUseCase
+import `in`.farmguide.myapplication.domainimpl.GetCategorizedRestaurantsUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -11,6 +11,6 @@ class DomainModule {
 
     @Provides
     @Singleton
-    fun provideGetPostsUseCase(getPostsUseCaseImpl: GetPostsUseCaseImpl): GetPostsUseCase = getPostsUseCaseImpl
+    fun provideGetPostsUseCase(getPostsUseCaseImpl: GetCategorizedRestaurantsUseCaseImpl): GetCategorizedRestaurantsUseCase = getPostsUseCaseImpl
 
 }

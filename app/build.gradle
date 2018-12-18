@@ -12,6 +12,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BASE_URL", "\"https://developers.zomato.com/api/v2.1/\""
+        buildConfigField "String", "API_KEY", "\"${System.env.ZOMATO_KEY}\""
     }
     buildTypes {
         release {
@@ -45,15 +48,6 @@ dependencies {
     // reactive
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
-
-    // Room Database
-    implementation "android.arch.persistence.room:runtime:$rootProject.RoomVersion"
-    implementation "android.arch.persistence.room:rxjava2:$rootProject.RoomVersion"
-    kapt "android.arch.persistence.room:compiler:$rootProject.RoomVersion"
-
-    //work
-    implementation "android.arch.work:work-runtime:$rootProject.work_version"
-    implementation "android.arch.work:work-rxjava2:$rootProject.work_version"
 
     // Lifecycle
     implementation "android.arch.lifecycle:runtime:$rootProject.androidArchVersion"

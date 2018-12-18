@@ -1,10 +1,10 @@
 package `in`.farmguide.myapplication.ui.main
 
 import `in`.farmguide.myapplication.R
+import `in`.farmguide.myapplication.data.ui.CategorizedRestaurants
 import `in`.farmguide.myapplication.data.ui.Resource
 import `in`.farmguide.myapplication.data.ui.ResourceState
 import `in`.farmguide.myapplication.extensions.longToast
-import `in`.farmguide.myapplication.repository.db.post.PostMinimal
 import `in`.farmguide.myapplication.ui.base.BaseActivity
 import android.arch.lifecycle.Observer
 import android.os.Bundle
@@ -19,7 +19,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     lateinit var mainViewModel: MainViewModel
 
     @Inject
-    lateinit var postsAdapter: PostsAdapter
+    lateinit var categoryAdapter: CategoryAdapter
 
     override fun getViewModel() = mainViewModel
 
@@ -29,27 +29,20 @@ class MainActivity : BaseActivity<MainViewModel>() {
         setContentView(R.layout.activity_main)
 
         recycler_view.layoutManager = LinearLayoutManager(this)
-        recycler_view.adapter = postsAdapter
+        recycler_view.adapter = categoryAdapter
 
-        bindListeners()
         bindViewModel()
     }
 
-    private fun bindListeners() {
-        btn_show_posts.setOnClickListener {
-            getViewModel().onLoadPostsClicked()
-        }
-    }
-
     private fun bindViewModel() {
-        getViewModel().getPostsObservable().observe(this, Observer { resource ->
+        getViewModel().getCategoriesObservable().observe(this, Observer { resource ->
             resource?.let {
-                handlePosts(it)
+                handleCategories(it)
             }
         })
     }
 
-    private fun handlePosts(resource: Resource<List<PostMinimal>>) {
+    private fun handleCategories(resource: Resource<List<CategorizedRestaurants>>) {
         when (resource.status) {
             ResourceState.LOADING -> showLoading()
             ResourceState.ERROR -> showError(resource.messageResId)
@@ -57,18 +50,16 @@ class MainActivity : BaseActivity<MainViewModel>() {
         }
     }
 
-    private fun showData(data: List<PostMinimal>?) {
+    private fun showData(data: List<CategorizedRestaurants>?) {
         progress_bar.visibility = View.GONE
-        btn_show_posts.visibility = View.GONE
         recycler_view.visibility = View.VISIBLE
-        postsAdapter.posts = data ?: emptyList()
+        categoryAdapter.categories = data ?: emptyList()
     }
 
     private fun showError(messageResId: Int?) {
         progress_bar.visibility = View.GONE
-        btn_show_posts.visibility = View.VISIBLE
         recycler_view.visibility = View.GONE
-        postsAdapter.posts = emptyList()
+        categoryAdapter.categories = emptyList()
 
         messageResId?.let {
             longToast(getString(it))
@@ -77,8 +68,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     private fun showLoading() {
         progress_bar.visibility = View.VISIBLE
-        btn_show_posts.visibility = View.GONE
         recycler_view.visibility = View.GONE
-        postsAdapter.posts = emptyList()
+        categoryAdapter.categories = emptyList()
     }
 }
