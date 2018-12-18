@@ -1,6 +1,7 @@
 package `in`.farmguide.myapplication.repository.network
 
 import `in`.farmguide.myapplication.repository.network.model.category.CategoriesResponse
+import `in`.farmguide.myapplication.repository.network.model.city.CitiesResponse
 import `in`.farmguide.myapplication.repository.network.model.restaurant.RestaurantsResponse
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -16,5 +17,9 @@ interface ApiRepository {
         @Query("category") category: Long,
         @Query("entity_id") cityId: Long
     ): Single<RestaurantsResponse>
+
+
+    @GET("cities")
+    fun getCities(@Query("q") query: String): Single<CitiesResponse>
 
 }

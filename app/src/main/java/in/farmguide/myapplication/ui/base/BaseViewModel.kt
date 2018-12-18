@@ -14,6 +14,7 @@ open class BaseViewModel : ViewModel() {
     private val internalErrorLiveData: SingleLiveEvent<Pair<Int, String?>> = SingleLiveEvent()
     private val toastLiveData: SingleLiveEvent<Pair<Int, String?>> = SingleLiveEvent()
     private val successLiveData: SingleLiveEvent<String> = SingleLiveEvent()
+    private val blockingLoaderLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -25,6 +26,8 @@ open class BaseViewModel : ViewModel() {
     fun getToastObservable() = toastLiveData
 
     fun getSuccessObservable() = successLiveData
+
+    fun getBlockingLoaderObservable() = blockingLoaderLiveData
 
     fun postError(messageResId: Int, extraText: String? = null) {
         internalErrorLiveData.postValue(Pair(messageResId, extraText))
@@ -49,5 +52,13 @@ open class BaseViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    fun <T> Single<T>.applyLoader(): Single<T> =
+        doOnSubscribe { setBlockingLoading(true) }
+            .doFinally { setBlockingLoading(false) }
+
+    private fun setBlockingLoading(isLoading: Boolean) {
+        blockingLoaderLiveData.postValue(isLoading)
     }
 }

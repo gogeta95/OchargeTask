@@ -8,12 +8,16 @@ import `in`.farmguide.myapplication.extensions.longToast
 import `in`.farmguide.myapplication.ui.base.BaseActivity
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<MainViewModel>() {
+
 
     @Inject
     lateinit var mainViewModel: MainViewModel
@@ -28,16 +32,44 @@ class MainActivity : BaseActivity<MainViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.title = null
+
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = categoryAdapter
 
+        setupclickListeners()
         bindViewModel()
+    }
+
+    private fun setupclickListeners() {
+        tv_location.setOnClickListener {
+            showLocationField()
+        }
+    }
+
+    private fun showLocationField() {
+        val view = layoutInflater.inflate(R.layout.location_field, null)
+        val editText: EditText = view.findViewById(R.id.et_yield_500)
+        AlertDialog.Builder(this)
+            .setView(view)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                mainViewModel.onCityUpdated(editText.text.toString().trim())
+            }
+            .show()
     }
 
     private fun bindViewModel() {
         getViewModel().getCategoriesObservable().observe(this, Observer { resource ->
             resource?.let {
                 handleCategories(it)
+            }
+        })
+
+        getViewModel().getCityLiveData().observe(this, Observer {
+            it?.let {
+                tv_location.text = it
             }
         })
     }
