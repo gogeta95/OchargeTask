@@ -18,16 +18,17 @@ class MainViewModel(private val getCategorizedRestaurantsUseCase: GetCategorized
         getRestaurants()
     }
 
-    fun onRetryClicked() = getRestaurants()
 
     private fun getRestaurants() {
         categoriesLiveData.postValue(Resource.Loading())
 
         addDisposable(
-            getCategorizedRestaurantsUseCase.getRestaurants()
+            //delhi is 1
+            getCategorizedRestaurantsUseCase.getRestaurantsInCity(1)
                 .subscribe({
                     categoriesLiveData.postValue(Resource.Success(it))
                 }, {
+                    it.printStackTrace()
                     categoriesLiveData.postValue(Resource.Error(R.string.error_msg))
                 })
         )

@@ -1,12 +1,9 @@
 package `in`.farmguide.myapplication.data.ui
 
+import `in`.farmguide.myapplication.repository.network.model.restaurant.Restaurant
+
 data class CategorizedRestaurants(
-    val listType: ListType,
     val category: String,
-    val categoryId: Int,
+    val categoryId: Long,
     val restaurants: List<Restaurant>
 )
-
-enum class ListType {
-    GRID, CARD, HORIZONTAL
-}

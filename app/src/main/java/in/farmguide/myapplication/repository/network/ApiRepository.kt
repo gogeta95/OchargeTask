@@ -13,8 +13,8 @@ interface ApiRepository {
 
     @GET("search?entity_type=city")
     fun getRestaurantInCategoryLocation(
-        @Query("category") category: Int,
-        @Query("entity_id") cityId: Int
+        @Query("category") category: Long,
+        @Query("entity_id") cityId: Long
     ): Single<RestaurantsResponse>
 
 }

@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 data class RestaurantsResponse (
 
     @SerializedName("restaurants")
-    val restaurants: List<Restaurant>,
+    val restaurantWrapper: List<RestaurantWrapper>?,
     @SerializedName("results_found")
-    val resultsFound: Long,
+    val resultsFound: Long?,
     @SerializedName("results_shown")
-    val resultsShown: Long,
+    val resultsShown: Long?,
     @SerializedName("results_start")
-    val resultsStart: Long
+    val resultsStart: Long?
 )

@@ -5,5 +5,5 @@ import io.reactivex.Single
 
 interface GetCategorizedRestaurantsUseCase {
 
-    fun getRestaurants(): Single<List<CategorizedRestaurants>>
+    fun getRestaurantsInCity(cityId: Long): Single<List<CategorizedRestaurants>>
 }

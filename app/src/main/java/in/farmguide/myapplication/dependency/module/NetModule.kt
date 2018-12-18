@@ -17,11 +17,6 @@ import javax.inject.Singleton
 @Module
 class NetModule {
 
-
-    @Provides
-    @Singleton
-    internal fun provideGson() = Gson()
-
     @Provides
     @Singleton
     internal fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -45,17 +40,16 @@ class NetModule {
 
     @Provides
     @Singleton
-    internal fun provideRetrofit(client: OkHttpClient, gson: Gson) = Retrofit.Builder()
-        .baseUrl("https://jsonplaceholder.typicode.com/")
-        .addConverterFactory(GsonConverterFactory.create(gson))
+    internal fun provideRetrofit(client: OkHttpClient) = Retrofit.Builder()
+        .baseUrl(BuildConfig.BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(client)
         .build()
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiRepository = retrofit.create(
-        ApiRepository::class.java)
+    fun provideApiService(retrofit: Retrofit): ApiRepository = retrofit.create(ApiRepository::class.java)
 
 
 }
